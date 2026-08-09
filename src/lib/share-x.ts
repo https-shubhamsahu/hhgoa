@@ -1,53 +1,26 @@
-import { dataUrlToBlob } from './image-optimizer';
-
-export async function shareToNativeOrX(
-  canvas: HTMLCanvasElement | null,
+/**
+ * Opens X (Twitter) composer directly using https://x.com/intent/post with URLSearchParams pre-filled caption.
+ */
+export function shareToX(
   builderName?: string,
   format: string = 'BUILDER_ID',
   projectUrl?: string
-): Promise<void> {
+): void {
   const customSnippet = projectUrl && projectUrl.trim() ? `\n\nProject: ${projectUrl.trim()}` : '';
   const caption = `🌴 Built a tiny thing for Hacker House Goa.\n\nYour photo → your Builder ID → your crew. 👀\n\nMade both the PFP + Crew Frame generator. No signup. Just build.${customSnippet}\n\nTry it: https://hhgoa-omega.vercel.app\n\n#FrameInGoa #HHGoa2026`;
 
-  // 1. Check if Web Share API is available with file sharing
-  if (canvas && navigator.share && navigator.canShare) {
-    try {
-      const dataUrl = canvas.toDataURL('image/png');
-      const blob = dataUrlToBlob(dataUrl);
-      const sanitizedName = (builderName || 'builder').toLowerCase().replace(/[^a-z0-9]/g, '-');
-      const filename =
-        format === 'PFP'
-          ? `hh-goa-pfp-${sanitizedName}.png`
-          : format === 'CREW'
-          ? `hh-goa-crew-${sanitizedName}.png`
-          : `hh-goa-card-${sanitizedName}.png`;
+  const params = new URLSearchParams();
+  params.set('text', caption);
 
-      const file = new File([blob], filename, { type: 'image/png' });
-      const shareData = {
-        title: 'Hacker House Goa 2026',
-        text: caption,
-        files: [file],
-      };
-
-      if (navigator.canShare(shareData)) {
-        await navigator.share(shareData);
-        return;
-      }
-    } catch (err) {
-      if ((err as Error).name !== 'AbortError') {
-        console.warn('Native share failed, falling back to X intent:', err);
-      } else {
-        return; // User cancelled native share sheet
-      }
-    }
-  }
-
-  // 2. Fallback to X Intent URL
-  const encodedText = encodeURIComponent(caption);
-  const targetUrl = `https://x.com/intent/post?text=${encodedText}`;
+  const targetUrl = `https://x.com/intent/post?${params.toString()}`;
   window.open(targetUrl, '_blank', 'noopener,noreferrer');
 }
 
-export function shareToX(builderName?: string, format: string = 'BUILDER_ID', projectUrl?: string) {
-  shareToNativeOrX(null, builderName, format, projectUrl);
+export function shareToNativeOrX(
+  _canvas: HTMLCanvasElement | null,
+  builderName?: string,
+  format: string = 'BUILDER_ID',
+  projectUrl?: string
+): void {
+  shareToX(builderName, format, projectUrl);
 }

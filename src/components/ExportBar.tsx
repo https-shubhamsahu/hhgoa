@@ -81,14 +81,14 @@ export const ExportBar: React.FC<ExportBarProps> = ({
           <span>DOWNLOAD PNG</span>
         </button>
 
-        {/* 2. Share on X / Native */}
+        {/* 2. Share on X */}
         <button
           type="button"
           onClick={handleShare}
           className="w-full flex items-center justify-center gap-2 bg-goa-pink hover:bg-pink-600 text-white font-bebas text-2xl py-3 px-4 rounded-xl border-3 border-black shadow-card-solid-yellow transition-all active:translate-y-0.5 font-bold focus:outline-none focus:ring-2 focus:ring-white min-h-[48px] cursor-pointer"
         >
           <Share2 className="w-6 h-6 text-white" />
-          <span>SHARE (#FrameInGoa)</span>
+          <span>SHARE ON X</span>
         </button>
       </div>
 
