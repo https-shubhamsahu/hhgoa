@@ -6,16 +6,8 @@ export async function shareToNativeOrX(
   format: string = 'BUILDER_ID',
   projectUrl?: string
 ): Promise<void> {
-  let modeText = 'Hacker House Goa 2026 Builder ID Passport';
-  if (format === 'PFP') {
-    modeText = 'Hacker House Goa 2026 PFP Frame';
-  } else if (format === 'CREW') {
-    modeText = 'Hacker House Goa 2026 Crew Frame';
-  }
-
-  const nameText = builderName ? `for ${builderName} ` : '';
-  const urlSnippet = projectUrl && projectUrl.trim() ? `\n\nProject: ${projectUrl.trim()}` : '';
-  const caption = `Just generated our official ${modeText} ${nameText}🌴\n\nBuilding & Vibing at Hacker House Goa 2026! 🚀${urlSnippet}\n\nSee you on the sunny beaches of Goa!\n\n#FrameInGoa`;
+  const customSnippet = projectUrl && projectUrl.trim() ? `\n\nProject: ${projectUrl.trim()}` : '';
+  const caption = `🌴 Built a tiny thing for Hacker House Goa.\n\nYour photo → your Builder ID → your crew. 👀\n\nMade both the PFP + Crew Frame generator. No signup. Just build.${customSnippet}\n\nTry it: https://hhgoa-omega.vercel.app\n\n#FrameInGoa #HHGoa2026`;
 
   // 1. Check if Web Share API is available with file sharing
   if (canvas && navigator.share && navigator.canShare) {
