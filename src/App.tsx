@@ -31,7 +31,7 @@ export const App: React.FC = () => {
     cropY: 0,
     cropZoom: 1,
     format: 'BUILDER_ID',
-    teamName: 'GOA AI HACKERS',
+    teamName: 'OPTI-MYSTIC',
     teammates: [],
   });
 

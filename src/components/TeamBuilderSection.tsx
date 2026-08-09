@@ -98,7 +98,7 @@ export const TeamBuilderSection: React.FC<TeamBuilderSectionProps> = ({
             type="text"
             value={data.teamName}
             onChange={(e) => onChangeData({ teamName: e.target.value })}
-            placeholder="e.g. Goa AI Hackers"
+            placeholder="e.g. OPTI-MYSTIC"
             className="w-full bg-goa-darker border-2 border-black rounded-xl p-3 text-sm text-goa-cream font-sans focus:border-goa-yellow outline-none min-h-[44px]"
           />
         </div>
