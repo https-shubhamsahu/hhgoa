@@ -10,6 +10,7 @@ interface ExportBarProps {
   onOpenCropper: () => void;
   hasPhoto: boolean;
   projectUrl?: string;
+  onDownloadComplete?: () => void;
 }
 
 export const ExportBar: React.FC<ExportBarProps> = ({
@@ -19,6 +20,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({
   onOpenCropper,
   hasPhoto,
   projectUrl,
+  onDownloadComplete,
 }) => {
   const handleDownload = () => {
     if (!canvasRef.current) return;
@@ -28,7 +30,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({
         particleCount: 80,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#006B3C', '#FF007A', '#FFB800', '#FFF9E8'],
+        colors: ['#006B3C', '#FF007A', '#FFB800', '#FFFBE8'],
       });
     } catch (e) {
       // Ignore
@@ -49,6 +51,10 @@ export const ExportBar: React.FC<ExportBarProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    if (onDownloadComplete) {
+      onDownloadComplete();
+    }
   };
 
   const handleShare = () => {

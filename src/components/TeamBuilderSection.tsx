@@ -9,6 +9,7 @@ interface TeamBuilderSectionProps {
   onChangeData: (updated: Partial<BuilderData>) => void;
   onDownloadTeamPng: () => void;
   canvasRef?: React.RefObject<HTMLCanvasElement>;
+  onDownloadComplete?: () => void;
 }
 
 export const TeamBuilderSection: React.FC<TeamBuilderSectionProps> = ({
@@ -16,6 +17,7 @@ export const TeamBuilderSection: React.FC<TeamBuilderSectionProps> = ({
   onChangeData,
   onDownloadTeamPng,
   canvasRef,
+  onDownloadComplete,
 }) => {
   const cameraInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const galleryInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
@@ -307,7 +309,10 @@ export const TeamBuilderSection: React.FC<TeamBuilderSectionProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             type="button"
-            onClick={onDownloadTeamPng}
+            onClick={() => {
+              onDownloadTeamPng();
+              if (onDownloadComplete) onDownloadComplete();
+            }}
             className="flex items-center justify-center gap-2 bg-goa-yellow hover:bg-yellow-400 text-black font-bebas text-xl py-3 px-4 rounded-xl border-3 border-black shadow-card-solid font-bold min-h-[48px] cursor-pointer"
           >
             <Download className="w-5 h-5" />

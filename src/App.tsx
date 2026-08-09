@@ -8,6 +8,8 @@ import { FrameCanvas } from './components/FrameCanvas';
 import { ExportBar } from './components/ExportBar';
 import { TeamBuilderSection } from './components/TeamBuilderSection';
 import { AboutUsSection } from './components/AboutUsSection';
+import { EngagementPopupModal } from './components/EngagementPopupModal';
+import { XPostEmbedSection } from './components/XPostEmbedSection';
 import { BuilderData, FrameFormat } from './types';
 import { BRAND_ASSETS } from './lib/brand-tokens';
 import { ShieldCheck } from 'lucide-react';
@@ -17,6 +19,7 @@ export const App: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [cropperOpen, setCropperOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'generator' | 'about'>('generator');
+  const [engagementPopupOpen, setEngagementPopupOpen] = useState(false);
   const [debugMode] = useState(false);
 
   // Listen to URL hash/pathname for direct /about or /#/about route scans
@@ -41,6 +44,15 @@ export const App: React.FC = () => {
       if (window.location.hash.includes('about')) {
         window.location.hash = '';
       }
+    }
+  };
+
+  const handleDownloadComplete = () => {
+    const seen = localStorage.getItem('hhgoa_popup_seen');
+    if (!seen) {
+      setTimeout(() => {
+        setEngagementPopupOpen(true);
+      }, 1000);
     }
   };
 
@@ -174,6 +186,7 @@ export const App: React.FC = () => {
                       onChangeData={handleUpdateData}
                       onDownloadTeamPng={handleDownloadTeamPng}
                       canvasRef={canvasRef}
+                      onDownloadComplete={handleDownloadComplete}
                     />
                   )}
                 </div>
@@ -206,6 +219,7 @@ export const App: React.FC = () => {
                       onOpenCropper={() => setCropperOpen(true)}
                       hasPhoto={!!builderData.photoUrl}
                       projectUrl={builderData.projectUrl}
+                      onDownloadComplete={handleDownloadComplete}
                     />
                   </div>
                 </div>
@@ -215,6 +229,9 @@ export const App: React.FC = () => {
             /* ABOUT US SECTION */
             <AboutUsSection onReturnToGenerator={() => handleSelectTab('generator')} />
           )}
+
+          {/* Embedded Official X Launch Post Section */}
+          <XPostEmbedSection />
         </main>
 
         {/* Image Cropper Modal */}
@@ -230,6 +247,12 @@ export const App: React.FC = () => {
               cropZoom: c.zoom,
             })
           }
+        />
+
+        {/* Engagement Popup Modal */}
+        <EngagementPopupModal
+          isOpen={engagementPopupOpen}
+          onClose={() => setEngagementPopupOpen(false)}
         />
 
         {/* Footer */}
