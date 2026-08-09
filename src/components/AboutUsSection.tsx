@@ -4,8 +4,8 @@ import { optimizePhotoInput } from '../lib/image-optimizer';
 import { BRAND_ASSETS } from '../lib/brand-tokens';
 
 export const AboutUsSection: React.FC = () => {
-  const [shubhamPhoto, setShubhamPhoto] = useState<string | null>(null);
-  const [bhavnaPhoto, setBhavnaPhoto] = useState<string | null>(null);
+  const [shubhamPhoto, setShubhamPhoto] = useState<string | null>(BRAND_ASSETS.shubhamPhoto);
+  const [bhavnaPhoto, setBhavnaPhoto] = useState<string | null>(BRAND_ASSETS.bhavnaPhoto);
 
   const shubhamInputRef = useRef<HTMLInputElement>(null);
   const bhavnaInputRef = useRef<HTMLInputElement>(null);
