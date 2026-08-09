@@ -264,7 +264,7 @@ export const TeamBuilderSection: React.FC<TeamBuilderSectionProps> = ({
                         className="flex items-center justify-center gap-1.5 bg-goa-pink hover:bg-pink-600 text-white text-xs font-mono py-2.5 px-2 rounded-xl border border-black min-h-[44px] font-bold"
                       >
                         <Camera className="w-4 h-4 text-white" />
-                        <span>📷 CAMERA</span>
+                        <span>CAMERA</span>
                       </button>
 
                       <button
@@ -273,7 +273,7 @@ export const TeamBuilderSection: React.FC<TeamBuilderSectionProps> = ({
                         className="flex items-center justify-center gap-1.5 bg-goa-green hover:bg-goa-green/80 text-goa-yellow text-xs font-mono py-2.5 px-2 rounded-xl border border-black min-h-[44px] font-bold"
                       >
                         <ImageIcon className="w-4 h-4 text-goa-yellow" />
-                        <span>🖼️ GALLERY</span>
+                        <span>GALLERY</span>
                       </button>
                     </div>
 

@@ -96,7 +96,7 @@ export const UploadDropzone: React.FC<UploadDropzoneProps> = ({
             aria-label="Take Photo using Camera"
           >
             <Camera className="w-5 h-5 text-white" />
-            <span>📷 TAKE PHOTO</span>
+            <span>TAKE PHOTO</span>
           </button>
 
           {/* Button 2: Choose from Gallery */}
@@ -107,7 +107,7 @@ export const UploadDropzone: React.FC<UploadDropzoneProps> = ({
             aria-label="Choose Photo from Gallery"
           >
             <ImageIcon className="w-5 h-5 text-black" />
-            <span>🖼️ CHOOSE FROM GALLERY</span>
+            <span>CHOOSE FROM GALLERY</span>
           </button>
         </div>
       )}
