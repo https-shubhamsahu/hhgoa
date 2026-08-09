@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Header } from './components/Header';
 import { FormatToggle } from './components/FormatToggle';
 import { UploadDropzone } from './components/UploadDropzone';
@@ -18,6 +18,31 @@ export const App: React.FC = () => {
   const [cropperOpen, setCropperOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'generator' | 'about'>('generator');
   const [debugMode] = useState(false);
+
+  // Listen to URL hash/pathname for direct /about or /#/about route scans
+  useEffect(() => {
+    const checkRoute = () => {
+      const hash = window.location.hash;
+      const path = window.location.pathname;
+      if (hash.includes('about') || path.includes('/about')) {
+        setActiveTab('about');
+      }
+    };
+    checkRoute();
+    window.addEventListener('hashchange', checkRoute);
+    return () => window.removeEventListener('hashchange', checkRoute);
+  }, []);
+
+  const handleSelectTab = (tab: 'generator' | 'about') => {
+    setActiveTab(tab);
+    if (tab === 'about') {
+      window.location.hash = '#/about';
+    } else {
+      if (window.location.hash.includes('about')) {
+        window.location.hash = '';
+      }
+    }
+  };
 
   const [builderData, setBuilderData] = useState<BuilderData>({
     name: 'SHUBHAM SAHU',
@@ -89,7 +114,7 @@ export const App: React.FC = () => {
       {/* Main Content Wrapper */}
       <div className="relative z-10 flex flex-col min-h-screen">
         {/* Event Header with Navigation */}
-        <Header activeTab={activeTab} onSelectTab={setActiveTab} />
+        <Header activeTab={activeTab} onSelectTab={handleSelectTab} />
 
         {/* Main Content Container */}
         <main className="max-w-6xl mx-auto w-full px-3 sm:px-6 pt-3 sm:pt-5 flex-grow space-y-4 sm:space-y-6">
@@ -188,7 +213,7 @@ export const App: React.FC = () => {
             </>
           ) : (
             /* ABOUT US SECTION */
-            <AboutUsSection />
+            <AboutUsSection onReturnToGenerator={() => handleSelectTab('generator')} />
           )}
         </main>
 

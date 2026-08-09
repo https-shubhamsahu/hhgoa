@@ -1,9 +1,13 @@
 import React, { useState, useRef } from 'react';
-import { Github, Linkedin, Twitter, Instagram, Camera, Upload, ExternalLink, Sparkles, Code2, HeartHandshake, Rocket } from 'lucide-react';
+import { Github, Linkedin, Twitter, Instagram, Camera, Upload, ExternalLink, Sparkles, Code2, HeartHandshake, Rocket, ArrowLeft, Frame } from 'lucide-react';
 import { optimizePhotoInput } from '../lib/image-optimizer';
 import { BRAND_ASSETS } from '../lib/brand-tokens';
 
-export const AboutUsSection: React.FC = () => {
+interface AboutUsSectionProps {
+  onReturnToGenerator?: () => void;
+}
+
+export const AboutUsSection: React.FC<AboutUsSectionProps> = ({ onReturnToGenerator }) => {
   const [shubhamPhoto, setShubhamPhoto] = useState<string | null>(BRAND_ASSETS.shubhamPhoto);
   const [bhavnaPhoto, setBhavnaPhoto] = useState<string | null>(BRAND_ASSETS.bhavnaPhoto);
 
@@ -24,7 +28,25 @@ export const AboutUsSection: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
+    <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8 animate-fadeIn">
+      {/* Top Return Button */}
+      {onReturnToGenerator && (
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onReturnToGenerator}
+            className="inline-flex items-center gap-2 bg-goa-darker hover:bg-goa-dark text-goa-yellow font-bebas text-lg px-4 py-2 rounded-xl border-2 border-black shadow-card-solid transition-all cursor-pointer font-bold min-h-[44px]"
+          >
+            <ArrowLeft className="w-5 h-5 text-goa-yellow" />
+            <span>CREATE YOUR FRAME</span>
+          </button>
+
+          <span className="font-mono text-xs text-goa-cream/60 hidden sm:inline">
+            Hacker House Goa 2026 • Official Crew
+          </span>
+        </div>
+      )}
+
       {/* 1. Hero Title Banner */}
       <div className="relative overflow-hidden bg-goa-darker/95 border-4 border-black rounded-3xl p-6 sm:p-8 shadow-card-solid text-center sm:text-left">
         <div
@@ -35,15 +57,15 @@ export const AboutUsSection: React.FC = () => {
         <div className="relative z-10 space-y-2">
           <div className="inline-flex items-center gap-2 bg-goa-yellow text-black font-bebas text-sm px-3 py-1 rounded-lg border border-black font-bold mb-1">
             <Sparkles className="w-4 h-4 text-goa-pink" />
-            <span>HACKER HOUSE GOA 2026 TEAM</span>
+            <span>HACKER HOUSE GOA 2026</span>
           </div>
 
           <h1 className="font-bebas text-4xl sm:text-6xl text-goa-yellow tracking-wide leading-none">
-            ABOUT US
+            MEET TEAM OPTI-MYSTIC
           </h1>
 
-          <p className="font-mono text-sm sm:text-base text-goa-cream/90 max-w-2xl font-medium">
-            Meet the builders behind the Hacker House Goa 2026 Frame Generator — creating tools, experiences, and digital magic for Goa! 🌴🚀
+          <p className="font-mono text-sm sm:text-base text-goa-cream/90 max-w-2xl font-medium pt-1">
+            Opti-Mystic is a builder crew exploring AI, systems, and ambitious ideas while building together. 🌴🚀
           </p>
         </div>
       </div>
@@ -300,6 +322,20 @@ export const AboutUsSection: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Bottom CTA to Return to Generator */}
+      {onReturnToGenerator && (
+        <div className="text-center pt-2">
+          <button
+            type="button"
+            onClick={onReturnToGenerator}
+            className="inline-flex items-center gap-2.5 bg-goa-yellow hover:bg-yellow-400 text-black font-bebas text-2xl py-3 px-8 rounded-2xl border-4 border-black shadow-card-solid-pink transition-all cursor-pointer font-bold active:translate-y-0.5"
+          >
+            <Frame className="w-6 h-6 text-black" />
+            <span>CREATE YOUR OWN HH GOA FRAME NOW</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };

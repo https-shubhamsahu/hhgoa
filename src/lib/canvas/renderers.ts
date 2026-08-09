@@ -6,7 +6,7 @@ import { BRAND_COLORS } from '../brand-tokens';
 import { generateQrDataUrl } from '../qr-generator';
 import { BUILDER_ID_LAYOUT } from './layout';
 
-const OFFICIAL_TEMPLATE_PATH = '/assets/brand/template_badge.png';
+const OFFICIAL_TEMPLATE_PATH = './assets/brand/template_badge.png';
 
 let cachedTemplateImg: HTMLImageElement | null = null;
 
@@ -30,7 +30,7 @@ function loadTemplateImage(): Promise<HTMLImageElement | null> {
   });
 }
 
-const PFP_TEMPLATE_PATH = '/assets/brand/pfp_final.png?v=7';
+const PFP_TEMPLATE_PATH = './assets/brand/pfp_final.png?v=7';
 let cachedPfpTemplateImg: HTMLImageElement | null = null;
 
 function loadPfpTemplateImage(): Promise<HTMLImageElement | null> {
@@ -240,8 +240,9 @@ export async function drawBuilderIdCard(
     'center'
   );
 
-  // 7. LAYER 7: Real Scannable QR Code & "CONNECT WITH US" Text (Lower Left)
-  const qrUrl = await generateQrDataUrl(`https://x.com/hashtag/FrameInGoa?builder=${encodeURIComponent(data.name || 'goa')}`);
+  // 7. LAYER 7: Scannable QR Code pointing to live site + "SCAN TO JOIN THE FRAME" Text
+  const qrTargetUrl = 'https://hhgoa-omega.vercel.app/';
+  const qrUrl = await generateQrDataUrl(qrTargetUrl);
   if (qrUrl) {
     const qrImg = new Image();
     await new Promise<void>((resolve) => {
@@ -258,14 +259,14 @@ export async function drawBuilderIdCard(
   }
 
   ctx.fillStyle = layout.qr.color;
-  ctx.font = '800 22px "Plus Jakarta Sans"';
+  ctx.font = '800 18px "Plus Jakarta Sans"';
   ctx.textAlign = 'left';
-  ctx.fillText('CONNECT', layout.qr.labelX, layout.qr.labelY - 14);
-  ctx.fillText('WITH US', layout.qr.labelX, layout.qr.labelY + 14);
+  ctx.fillText('SCAN TO', layout.qr.labelX, layout.qr.labelY - 14);
+  ctx.fillText('JOIN THE FRAME', layout.qr.labelX, layout.qr.labelY + 12);
 
   // 8. LAYER 8: Dynamic Team Name ("TEAM NAME" + "YOUR TEAM") (Lower Right)
   const teamLabel = 'TEAM NAME';
-  const teamName = (data.teamName && data.teamName.trim() ? data.teamName.trim() : 'YOUR TEAM').toUpperCase();
+  const teamName = (data.teamName && data.teamName.trim() ? data.teamName.trim() : 'OPTI-MYSTIC').toUpperCase();
 
   ctx.fillStyle = layout.team.color;
   ctx.font = 'bold 20px "Plus Jakarta Sans"';
@@ -291,7 +292,7 @@ export async function drawBuilderIdCard(
   }
 }
 
-const CREW_TEMPLATE_PATH = '/assets/brand/template_crew.png?v=1';
+const CREW_TEMPLATE_PATH = './assets/brand/template_crew.png?v=1';
 let cachedCrewTemplateImg: HTMLImageElement | null = null;
 
 function loadCrewTemplateImage(): Promise<HTMLImageElement | null> {
@@ -316,7 +317,7 @@ function loadCrewTemplateImage(): Promise<HTMLImageElement | null> {
 
 /**
  * COMBINED TEAM / CREW FRAME RENDERER (2048 x 1362 px)
- * Composites dynamic team name, member photos (1 to 4 members), names, roles, and QR code onto the immutable template!
+ * Composites dynamic team name, member photos (1 to 4 members), names, roles, and QR code pointing to About Us!
  */
 export async function drawTeamFrame(
   canvas: HTMLCanvasElement,
@@ -344,7 +345,7 @@ export async function drawTeamFrame(
   }
 
   // 2. LAYER 2: Dynamic Team Name (2x Size, baseline Y=530, max font size 140px)
-  const teamNameText = (data.teamName.trim() || 'GOA AI HACKERS').toUpperCase();
+  const teamNameText = (data.teamName.trim() || 'OPTI-MYSTIC').toUpperCase();
   fillTextFitWidth(
     ctx,
     teamNameText,
@@ -478,10 +479,10 @@ export async function drawTeamFrame(
     );
   }
 
-  // 4. LAYER 4: Dynamic QR Code shifted right 5px, down 5px (x=50, y=980, size=180)
+  // 4. LAYER 4: Dynamic QR Code pointing to About Us page: https://hhgoa-omega.vercel.app/#/about
   const qrTargetUrl = data.projectUrl && data.projectUrl.trim()
     ? data.projectUrl.trim()
-    : `https://x.com/hashtag/FrameInGoa?team=${encodeURIComponent(data.teamName || 'crew')}`;
+    : 'https://hhgoa-omega.vercel.app/#/about';
 
   if (qrTargetUrl) {
     const qrUrl = await generateQrDataUrl(qrTargetUrl);
@@ -502,84 +503,6 @@ export async function drawTeamFrame(
   }
 }
 
-function drawMemberCard(
-  ctx: CanvasRenderingContext2D,
-  member: { name: string; role: string; img: HTMLImageElement | null; cropX: number; cropY: number; cropZoom: number },
-  x: number,
-  y: number,
-  w: number,
-  h: number
-) {
-  ctx.fillStyle = BRAND_COLORS.solidBlack;
-  ctx.fillRect(x + 8, y + 8, w, h);
-
-  ctx.fillStyle = BRAND_COLORS.midnightDark;
-  ctx.fillRect(x, y, w, h);
-  ctx.strokeStyle = BRAND_COLORS.sunYellow;
-  ctx.lineWidth = 4;
-  ctx.strokeRect(x, y, w, h);
-
-  const photoH = h - 80;
-
-  if (member.img) {
-    drawImageCover(ctx, member.img, { x, y, width: w, height: photoH }, member.cropX, member.cropY, member.cropZoom, 0);
-  } else {
-    ctx.fillStyle = 'rgba(255, 251, 232, 0.3)';
-    ctx.font = 'bold 20px "Plus Jakarta Sans"';
-    ctx.textAlign = 'center';
-    ctx.fillText('PHOTO', x + w / 2, y + photoH / 2);
-  }
-
-  ctx.fillStyle = '#062316';
-  ctx.fillRect(x, y + photoH, w, 80);
-  ctx.strokeStyle = BRAND_COLORS.hotPink;
-  ctx.lineWidth = 2;
-  ctx.strokeRect(x, y + photoH, w, 80);
-
-  const nameUpper = member.name.toUpperCase();
-  fillTextFitWidth(ctx, nameUpper, x + w / 2, y + photoH + 34, w - 16, 28, 'Bebas Neue', 'bold', BRAND_COLORS.sandCream, 'center');
-
-  const roleUpper = member.role.toUpperCase();
-  fillTextFitWidth(ctx, roleUpper, x + w / 2, y + photoH + 62, w - 16, 18, 'Space Mono', 'bold', BRAND_COLORS.sunYellow, 'center');
-}
-
-function drawStampBadge(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  bg: string,
-  fg: string,
-  topText: string,
-  botText: string
-) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate((-12 * Math.PI) / 180);
-
-  ctx.fillStyle = bg;
-  ctx.beginPath();
-  ctx.arc(0, 0, 60, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.strokeStyle = fg;
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.arc(0, 0, 53, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.fillStyle = fg;
-  ctx.font = 'bold 20px "Bebas Neue"';
-  ctx.textAlign = 'center';
-  ctx.fillText(topText, 0, -8);
-  ctx.fillText(botText, 0, 18);
-
-  ctx.restore();
-}
-
-/**
- * Development Debug Overlay
- * Draws semi-transparent bounding boxes over canvas regions to verify alignment against reference
- */
 function drawDebugBoundingBoxes(ctx: CanvasRenderingContext2D, layout: typeof BUILDER_ID_LAYOUT) {
   ctx.save();
 
